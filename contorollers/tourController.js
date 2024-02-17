@@ -36,7 +36,7 @@ exports.createTour = async (req, res) => {
         res.status(201).json({
             status: 'ok',
             data: {
-                tour: newTour // Sending the newly created tour in the response
+                tour: newTour // Sending the newly created tour in the response 
             }
         });
     }catch(err){
