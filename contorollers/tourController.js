@@ -89,18 +89,19 @@ exports.updateTour = async (req, res) => {
     }
 }
 
-exports.deleteTour = (req, res) => {
-    
-    if(req.params.id *1>tours.length){
-        return res.status(404).json({
-            status: 'fail',
-            message: 'Tour not found'
-        });
+exports.deleteTour = async (req, res) => {
+    try{
+        await Tour.findByIdAndDelete(req.params.id)
+        
+        res.status(204).json({
+            status: 'OK',
+            data: null
+   })
+    }catch(err){
+
+    res.status(400).json({
+        status: 'fail',
+        message: err})
+   
     }
-    res.status(204).json({
-        status: 'OK',
-        data: null
-   }
-    
-   )
 }
