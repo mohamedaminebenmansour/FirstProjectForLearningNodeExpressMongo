@@ -6,16 +6,25 @@ exports.getAllTours =async (req, res) => {
     try {
         console.log(req.query);
         //Build Query
-        //1)Filtring
+        //1A)Filtring
         const queryObj = {...req.query};
         const excludeFields = ['page','sort','limit','fields'];
         excludeFields.forEach(el=>delete queryObj[el]);
-        //2) Advance filtring (gte,gt,lt,lte)
+        //1B) Advance filtring (gte,gt,lt,lte)
         let queryStr = JSON.stringify(queryObj);
         queryStr = queryStr.replace(/\b(gte|gt|lt|lte)\b/g, match=>`$${match}`); 
-        console.log("JSON.parse(queryStr)=",JSON.parse(queryStr));  
-        
-        const query = await Tour.find(JSON.parse(queryStr));// return query
+        let query =  Tour.find(JSON.parse(queryStr));// return query
+
+        //2) Sorting
+        //"127.0.0.1:3000/api/v1/tours?sort=price" mongoose will automatically sort them ascending 
+        //"127.0.0.1:3000/api/v1/tours?sort=-price" mongoose will automatically sort them descending
+        if(req.query.sort){
+            const sortBy = req.query.sort.split(',').join(' ') ;
+            query = query.sort(sortBy);
+            //sort('price ratingsAverage') "127.0.0.1:3000/api/v1/tours?sort=price,ratingsAverage"
+        }else{
+            query =query.sort('-createdAt');
+        }
         //Execute Query
         const tours = await query;
         
