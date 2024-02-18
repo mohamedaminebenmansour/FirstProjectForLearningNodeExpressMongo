@@ -23,17 +23,25 @@ exports.getAllTours =async (req, res) => {
     }
 }
 
-exports.getTour = (req, res) => {
-    const id = req.params.id *1;
-    //const tour = tours.find(t => t.id===id);
-/*
-    res.status(200).json({
-        status: 'OK',
-        data: {
-            //tours: tour
-        }
-       
-    });*/
+exports.getTour = async (req, res) => {
+    try {
+        console.log(req.params.id);
+        const tour= await Tour.findById(req.params.id);
+        //Tour.findOne({_id: req.params.id})
+
+        res.status(200).json({
+            status: 'OK',
+            data: {
+                 tour
+            }
+        
+        });
+    }catch (err) {
+        res.status(404).json({
+            status: 'fail',
+            message: err
+        });
+    }
 }
 
 exports.createTour = async (req, res) => {
