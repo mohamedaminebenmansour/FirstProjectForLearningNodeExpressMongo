@@ -4,20 +4,17 @@ const { query } = require('express');
 
 exports.getAllTours =async (req, res) => {
     try {
-
+        //Build Query
         const queryObj = {...req.query};
         const excludeFields = ['page','sort','limit','fields'];
         excludeFields.forEach(el=>delete queryObj[el]);
         console.log(queryObj);
         console.log(req.query);
-        //first way
-        const tours = await Tour.find(queryObj);
-        //second way
-        /*
-        const tours = await Tour.find()
-            .where('duration').equals(req.query.duration)
-            .where('difficulty').equals(req.query.difficulty);
-        */
+        const query = await Tour.find(queryObj);// return query
+        //Execute Query
+        const tours = await query;
+        
+        //Send Response
         res.status(200).json({
             
             status: 'OK',
