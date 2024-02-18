@@ -4,13 +4,18 @@ const { query } = require('express');
 
 exports.getAllTours =async (req, res) => {
     try {
+        console.log(req.query);
         //Build Query
+        //1)Filtring
         const queryObj = {...req.query};
         const excludeFields = ['page','sort','limit','fields'];
         excludeFields.forEach(el=>delete queryObj[el]);
-        console.log(queryObj);
-        console.log(req.query);
-        const query = await Tour.find(queryObj);// return query
+        //2) Advance filtring (gte,gt,lt,lte)
+        let queryStr = JSON.stringify(queryObj);
+        queryStr = queryStr.replace(/\b(gte|gt|lt|lte)\b/g, match=>`$${match}`); 
+        console.log("JSON.parse(queryStr)=",JSON.parse(queryStr));  
+        
+        const query = await Tour.find(JSON.parse(queryStr));// return query
         //Execute Query
         const tours = await query;
         
