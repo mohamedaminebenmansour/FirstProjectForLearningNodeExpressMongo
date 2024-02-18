@@ -25,7 +25,7 @@ exports.getAllTours =async (req, res) => {
 
 exports.getTour = async (req, res) => {
     try {
-        console.log(req.params.id);
+       
         const tour= await Tour.findById(req.params.id);
         //Tour.findOne({_id: req.params.id})
 
@@ -63,17 +63,30 @@ exports.createTour = async (req, res) => {
     
 }
 
-exports.updateTour = (req, res) => {
+exports.updateTour = async (req, res) => {
     
-    
-    res.status(200).json({
-        status: 'OK',
-        data: {
-            //tours: tours
-        }
-   }
-    
-   )
+    try{
+        const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
+            new: true ,
+            runValidators: true
+        });
+        res.status(200).json({
+            status: 'OK',
+            data: {
+                /*In fact "tour"==== " tour : "tour" "
+                so the tour property is set the "tour" object, but thanks to ES6, we no longer have to do that
+                when the property nams has the same name of the value  */
+                tour
+            }
+    }
+        
+    )
+    }catch(err){
+        res.status(400).json({
+            status: 'fail',
+            message: err
+        });
+    }
 }
 
 exports.deleteTour = (req, res) => {
