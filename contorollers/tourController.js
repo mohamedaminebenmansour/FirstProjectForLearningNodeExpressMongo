@@ -28,17 +28,28 @@ exports.getAllTours =async (req, res) => {
         
         //3)Field limiting
         if(req.query.fields){
-            console.log(req.query.fields)
             const fields = req.query.fields.split(',').join(' ');
-            console.log(fields)
-            query = query.select(fields)
-            console.log(query);
+            query = query.select(fields);
         }else{
             query= query.select('-__v');
         }
 
+        // 4) Pagination
+        const page = req.query.page * 1 || 1;
+        const limit = req.query.limit * 1 || 100;
+        const skip = (page - 1) * limit;
+        query = query.skip(skip).limit(limit);
+
+        if(req.query.page){
+            const numTours =await Tour.countDocuments();
+            /*why am I throwing an error here?
+            Simply because if I throw an erroe here, it will then automaticall and immedately
+            move on to the catch block*/
+            if(skip >=  numTours) throw new Error ('this page does not exist');
+        }
         //Execute Query
         const tours = await query;
+        //query.sort().select().skip().limit()
         //Send Response
         res.status(200).json({
             
