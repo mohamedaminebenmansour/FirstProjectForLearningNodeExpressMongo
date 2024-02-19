@@ -113,7 +113,55 @@ exports.deleteTour = async (req, res) => {
 
     res.status(400).json({
         status: 'fail',
-        message: err})
+        message: err
+    })
    
+    }
+}
+
+exports.getTourStats = async (req, res) => {
+    try{
+        const stats = await Tour.aggregate([
+            {
+                /*I'm gonna start with match, and match is basically to slect or to filter
+                certain documents */
+                $match : {
+                    ratingsAverge: {
+                        $gte: 4.5
+                    }
+                }
+            },
+            {
+                $group : {
+                    _id: { $toUpper: '$difficulty' },
+                    avgRating: { $avg: '$ratingsAverge' },
+                    numTours: { $sum: 1 },
+                    numRatings: { $sum: '$ratingsQuantity' },
+                    avgPrice: { $avg: '$price' },
+                    minPrice: { $min: '$price' },
+                    maxPrice: { $max: '$price' }
+
+                }
+            },
+            {
+              $sort: { avgPrice: 1 }//use fields from thr group
+            }
+            // {
+            //   $match: { _id: { $ne: 'EASY' } }
+            // }
+        ])
+        console.log(stats);
+        res.status(200).json({
+            status: 'success',
+            data: {
+              stats : stats
+            }
+        });
+
+    }catch(err){ 
+        res.status(400).json({
+            status: 'fail',
+            message: err
+        })
     }
 }
