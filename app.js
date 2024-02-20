@@ -21,6 +21,7 @@ app.use((req, res, next) => {
 
 app.use('/api/v1/tours', tourRouter); //this is called mounting the router
 app.use('/api/v1/users', userRouter); //this is called mounting the router
-// 4)START SERVER
+
+
 
 module.exports = app;
