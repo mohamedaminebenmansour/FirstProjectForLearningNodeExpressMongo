@@ -22,6 +22,11 @@ app.use((req, res, next) => {
 app.use('/api/v1/tours', tourRouter); //this is called mounting the router
 app.use('/api/v1/users', userRouter); //this is called mounting the router
 
-
+app.all('*', (req, res, next) => {
+  res.status(404).json({
+    status: 'fail',
+    message: `Can't find ${req.originalUrl} on this server`
+  });
+})
 
 module.exports = app;
