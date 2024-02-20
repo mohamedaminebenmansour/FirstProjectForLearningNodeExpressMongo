@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const slugify = require('slugify');
+
 const tourShema = new mongoose.Schema({
     name: 
     {
@@ -8,6 +10,7 @@ const tourShema = new mongoose.Schema({
       trim: true
       
     },
+    slug: String,
     duration: 
     {
         type: Number,
@@ -80,6 +83,22 @@ And so usually when we want to use this,then we should always use a regular func
 tourShema.virtual('durationWeeks').get(function(){
   return this.duration / 7;
 });
+
+//Document Middelware: runs before .save() and .create() not .insertMany()
+tourShema.pre('save', function(next){
+  this.slug = slugify(this.name, {lower:true});
+  next();
+})
+/*
+ tourShema.pre('save', function(next){
+  console.log('wil save document ...');
+  next();
+ })
+tourShema.post('save', function(doc,next){
+  console.log(doc);
+  next();
+})
+*/
 
 const Tour = mongoose.model('Tour', tourShema);
 
