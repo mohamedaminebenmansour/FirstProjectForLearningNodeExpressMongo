@@ -41,7 +41,7 @@ exports.getTour =catchAsync ( async (req, res,next) => {
 })
 
 
-exports.createTour = catchAsync(async (req, res) => {
+exports.createTour = catchAsync(async (req, res,next) => {
     const newTour = await Tour.create(req.body);//"req.body" that's the data that comes with the post request
         res.status(201).json({
             status: 'ok',
