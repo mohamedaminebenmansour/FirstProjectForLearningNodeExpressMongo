@@ -5,6 +5,17 @@ const mongoose = require('mongoose')
 const dotenv = require('dotenv');
 dotenv.config({path: './config.env'});
 
+process.on('uncaughtException', err =>{
+  console.log('Uncaught Exception!! Shutting down ...');
+  console.log(err.name, err.message);
+  
+    /*we really need to crach our app because after these was an uncaught exception
+    the entire node process is in a so cold UNCLEAN STATE.
+      So to fix that the process need to terminate and then too be restard*/
+  process.exit(1);
+  
+  
+})
 
 const app = require('./app');
 
@@ -23,9 +34,11 @@ const server = app.listen(port, () => {
 
 process.on('unhandledRejection', err => {
   console.log(err.name, err.message);
-  console.log('Unhandled rejection!!');
+  console.log('Unhandled rejection!! Shutting down ...');
   server.close(() => {
-    process.exit(1);
+    process.exit(1);// optional
   })
   
 })
+
+//console.log(x);// exemple of Uncaught Exception
