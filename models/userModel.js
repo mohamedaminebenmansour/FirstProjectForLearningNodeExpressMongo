@@ -39,6 +39,9 @@ userSchema.pre('save',async function(next){
     // Hash the password with cost of 12
     this.password = await bcrypt.hash(this.password,12);
     // Delete passwordConfirm field (IMPORTANT!)
+    /*we have required on usershema , now you might wonder wyh this works?
+    because we actuallay set passwrd confirm  to a require but that simply
+    means that it's a required input , not it's required to actually be presisted. */
     this.passwordConfirm = undefined;
     next();
 })
