@@ -1,8 +1,9 @@
 const express = require('express');
 const userController = require('./../contorollers/userController');
+const authController = require('./../contorollers/authController');
 const router =express.Router(); 
 
-
+router.post('/signup',authController.signup);
 
 
 router

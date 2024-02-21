@@ -18,12 +18,12 @@ const userSchema = new mongoose.Schema({
     },
     photo: String,
     password :{
-        typeof: String,
+        type: String,
         required: [ true, "A User must have an email " ],
         minlength: [8, 'A User password must have more or equal then 8 characters']
     },
     passwordConfirm :{
-        typeof: String,
+        type: String,
         required: [ true, "A User must have an email " ]
     }
 })
