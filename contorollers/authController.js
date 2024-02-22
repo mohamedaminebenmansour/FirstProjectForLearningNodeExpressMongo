@@ -1,3 +1,4 @@
+const {promisify} = require('util');
 const jwt = require('jsonwebtoken');
 const User = require('./../models/userModel');
 const catchAsync = require('./../utils/catchAsync');
@@ -59,9 +60,10 @@ exports.login = catchAsync(async (req, res, next) => {
 exports.protect = catchAsync(async(req, res, next) => {
     // 1) Getting token and chek of it's exist
     let token;
+    console.log(req.headers.authorization && req.headers.authorization.startsWith('Bearer '))
     if(req.headers.authorization && req.headers.authorization.startsWith('Bearer ')){
-        const token = req.headers.authorization.split(' ')[1];
-        console.log('Token=',token);
+        token = req.headers.authorization.split(' ')[1];
+        
     }
     if(!token){
         console.log('!Token')
@@ -69,7 +71,8 @@ exports.protect = catchAsync(async(req, res, next) => {
     }
     
     // 2) Verfication token
-
+    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+    
     // 3) Check if user stil exists
 
     // 4) check if user changed passwrd after the token was issued
