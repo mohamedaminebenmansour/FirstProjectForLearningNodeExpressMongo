@@ -70,7 +70,7 @@ exports.protect = catchAsync(async(req, res, next) => {
         return next(new AppError('You are not logged in!',401));//401 unauthrozed
     }
     
-    // 2) Verfication token
+    // 2) Verfication token 
     const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
     
     // 3) Check if user stil exists
