@@ -66,7 +66,6 @@ exports.protect = catchAsync(async(req, res, next) => {
         
     }
     if(!token){
-        console.log('!Token')
         return next(new AppError('You are not logged in!',401));//401 unauthrozed
     }
     
@@ -80,6 +79,10 @@ exports.protect = catchAsync(async(req, res, next) => {
     }
 
     // 4) check if user changed passwrd after the token was issued
-
+    if(freshUser.changedPasswordAfter(decoded.iat)){
+        return next(new AppError('Your password has changed since you last logged in! Please log in again',401));
+    }
+    //Grant Access To Protected Route
+    req.user = freshUser;
     next();
 })
