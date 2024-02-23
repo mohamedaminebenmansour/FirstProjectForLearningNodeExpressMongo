@@ -55,10 +55,14 @@ userSchema.pre('save',async function(next){
     this.passwordConfirm = undefined;
     next();
 })
-
+ userSchema.pre('save',async function(next){
+  if(!this.isModified('password')|| this.isNew) return next();
+  this.passwrdChangedAt = Date.now()-1000;
+  next();
+ });
 /*for the first time now we're gonna create somthingc called an INSTANCE METHOD
 so an instance method is absically a method that is gonna available on all documents
-of a certain collection */
+of a certain collection */ 
 userSchema.methods.correctPassword =async function(candidatePassword,userPassword){
     return await bcrypt.compare(candidatePassword,userPassword)
 };
