@@ -6,6 +6,7 @@ const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
+const hpp = require('hpp');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./contorollers/errorController');
@@ -46,6 +47,19 @@ If that wwould then later be injected into our HTML site,it could really create 
 damage then. Using this middleware, we prevent that basically by converting all these
 HTML symbols */
 app.use(xss());
+
+// Prevent parameter pollution
+
+app.use(hpp({
+  whitelist: [
+    'duration',
+    'ratingsQuantity',
+    'ratingsAverage',
+    'maxGroupSize',
+    'difficulty',
+    'price'
+  ]
+}));
 //Serving static files
 app.use(express.static(`${__dirname}/public`));
 // test middleware
