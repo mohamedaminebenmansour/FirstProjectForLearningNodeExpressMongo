@@ -29,6 +29,14 @@ const token = signToken(user._id);
 
 const createSendToken =(user,statusCode,res)=>{
   const token = signToken(user._id);
+  const cookieOptions = {
+    expiresIn: new Date(Date.now()+ process.env.JWT_COOKIES_EXPIRES_IN *1000*60*60*24) ,
+    httpOnly:true //in order to provent those cross script attacks
+  }
+  if(process.env.NODE_ENV === 'production'){
+    cookieOptions.secure = true;
+  }
+  res.cookie('jwt',token,cookieOptions)
   res.status(statusCode).json({
     status: 'ok',
     token: token,
@@ -206,7 +214,8 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   user.passwordConfirm = req.body.passwordConfirm;
   await user.save();
   // User.findByIdAndUpdate will NOT work as intended!
-  /*The qustion here: why we didn't do something like user.findByIdAndUpdate?it is for two reasons:
+  /*The qustion here: why we didn't do something like user.findByIdAndUpdate?
+  it is for two reasons:
   ONE: the first one is that this validation here 
     "passwordConfirm: {
       type: String,
@@ -219,7 +228,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
         message: 'Passwords are not the same!'
       }"is not going to work,
     And that's basically because this.password is not defined when we update, 
-    so when we use find by ID and update, because internally, behind the scenes,
+    so when we use "findByIdAndUpdate", because internally, behind the scenes,
     Mongoose does not really keep the current object in memory,and so therefore, this here is not going to work.
 
   !!!it's really important to keep in mind not to use update for anything related to passwords!!!
