@@ -21,10 +21,7 @@ const app = require('./app');
 
 const DB = process.env.DATABASE_LOCAL ;
 
-mongoose.connect(DB,{
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
+mongoose.connect(DB)
 .then(con => console.log("DB connection established"))
 
 const port = process.env.PORT;
