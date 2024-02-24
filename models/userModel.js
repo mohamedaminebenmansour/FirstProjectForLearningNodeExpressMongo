@@ -40,7 +40,12 @@ const userSchema = new mongoose.Schema({
     },
     passwrdChangedAt : Date,
     passwordResetToken: String,
-    passwordResetExpires: Date
+    passwordResetExpires: Date,
+    active :{
+      type: Boolean,
+      default: true,
+      select: false
+    }
 });
 
 userSchema.pre('save',async function(next){
@@ -60,6 +65,13 @@ userSchema.pre('save',async function(next){
   this.passwrdChangedAt = Date.now()-1000;
   next();
  });
+
+userSchema.pre(/^find/, function(next){
+  //this points to the current query
+  //this.find({active : true});//
+  this.find({active : {$ne:false}})
+  next();
+})
 /*for the first time now we're gonna create somthingc called an INSTANCE METHOD
 so an instance method is absically a method that is gonna available on all documents
 of a certain collection */ 

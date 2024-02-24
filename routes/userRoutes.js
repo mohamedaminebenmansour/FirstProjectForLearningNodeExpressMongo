@@ -8,8 +8,12 @@ router.post('/login',authController.login);
 
 router.post('/forgetPassword',authController.forgotPasswrd);
 router.patch('/resetPassword/:token',authController.resetPassword);
-router.patch('/updateMe',authController.protect,userController.updateMe);
 router.patch('/updateMyPassword',authController.protect,authController.updatePassword);
+router.patch('/updateMe',authController.protect,userController.updateMe);
+/*We are not actually delete a user from the database */
+router.delete('/deleteMe',authController.protect,userController.deleteMe);
+
+
 router
     .route('/')
     .get(userController.getAllUsers)
