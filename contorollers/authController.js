@@ -16,6 +16,27 @@ const signToken = id =>{
     });
 };
 
+/*we use this same code 4 times So I need to create a function
+!!!DRY: Dont Repeat Yourself!!!
+const token = signToken(user._id);
+  res.status(200).json({
+    status: 'ok',
+    token: token,
+    data: {
+      user: user
+    }
+  }); */
+
+const createSendToken =(user,statusCode,res)=>{
+  const token = signToken(user._id);
+  res.status(statusCode).json({
+    status: 'ok',
+    token: token,
+    data: {
+      user: user
+    }
+  });
+}
 
 exports.signup = catchAsync(async (req, res, next) => {
     //this is line is not secure because everything is request body
@@ -28,15 +49,8 @@ exports.signup = catchAsync(async (req, res, next) => {
         passwordConfirm: req.body.passwordConfirm,
         role :req.body.role
     });
-
+    createSendToken(newUser,201, res);
     const token = signToken(newUser._id) ;
-    res.status(201).json({
-        status: 'ok',
-        token: token,
-        data: {
-            user: newUser
-        }
-    })
 });
 
 exports.login = catchAsync(async (req, res, next) => {
@@ -53,11 +67,7 @@ exports.login = catchAsync(async (req, res, next) => {
     }
 
     // 3) If everything is ok, send token to client
-    const token =signToken(user._id);
-    res.status(200).json({
-        status: 'ok',
-        token: token
-    })
+    createSendToken(user,200, res);
 });
 
 exports.protect = catchAsync(async (req, res, next) => {
@@ -179,13 +189,45 @@ exports.resetPassword = catchAsync(async(req, res, next) => {
   user.passwordResetExpires = undefined;
   await user.save();
   //4)log the user in , send JWT
-  const token = signToken(user._id);
-  res.status(200).json({
-    status: 'ok',
-    token: token,
-    data: {
-      user: user
-    }
-  });
+  createSendToken(userser,200, res);
 });
 
+exports.updatePassword = catchAsync(async (req, res, next) => {
+  // 1) Get user from collection
+  const user = await User.findById(req.user.id).select('+password');
+
+  // 2) Check if POSTed current password is correct
+  if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
+    return next(new AppError('Your current password is wrong.', 401));
+  }
+
+  // 3) If so, update password
+  user.password = req.body.password;
+  user.passwordConfirm = req.body.passwordConfirm;
+  await user.save();
+  // User.findByIdAndUpdate will NOT work as intended!
+  /*The qustion here: why we didn't do something like user.findByIdAndUpdate?it is for two reasons:
+  ONE: the first one is that this validation here 
+    "passwordConfirm: {
+      type: String,
+      required: [true, 'Please confirm your password'],
+      validate: {
+        // This only works on CREATE and SAVE!!!
+        validator: function(el) {
+            return el === this.password;
+        },
+        message: 'Passwords are not the same!'
+      }"is not going to work,
+    And that's basically because this.password is not defined when we update, 
+    so when we use find by ID and update, because internally, behind the scenes,
+    Mongoose does not really keep the current object in memory,and so therefore, this here is not going to work.
+
+  !!!it's really important to keep in mind not to use update for anything related to passwords!!!
+  TWO: these two pre-saved Middlewares are also not going to work.So, if we used simply update for updating the password,
+    then that password would not be encrypted, which is this first Middleware, and then also, the passwordChangedAt
+    timestamp would also not be set, okay?
+ */
+
+  // 4) Log user in, send JWT
+  createSendToken(user, 200, res);
+});
