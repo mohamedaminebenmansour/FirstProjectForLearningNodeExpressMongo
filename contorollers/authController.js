@@ -37,6 +37,9 @@ const createSendToken =(user,statusCode,res)=>{
     cookieOptions.secure = true;
   }
   res.cookie('jwt',token,cookieOptions)
+
+  user.password = undefined;//dont show the password when creating new user
+
   res.status(statusCode).json({
     status: 'ok',
     token: token,
