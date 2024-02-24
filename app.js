@@ -4,6 +4,8 @@ const app = express(); // Creating an instance of Express application
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./contorollers/errorController');
@@ -30,6 +32,20 @@ app.use('/api', limiter);
 
 // Body parser, reading data from body into req.body
 app.use(express.json({limit:'10kb'}));
+
+// DATA sanitization against NOsql query injection " "email": {"$gt":""}"
+/*so what's this middleware does is to lock at the resuest body, the request 
+query string and Request.Params and then it will basically filter out all of the
+dollar signs and dots because that's how monogoDB operators are written */
+app.use(mongoSanitize());
+// DATA sanitization against XSS attacks (XSS Cross-Site Scripting )
+/*This middleware will clean any user input from malicious HTML code , basically
+Imagine that an attacker would try to insert some malicious HTML code with some JS 
+code attached to it.
+If that wwould then later be injected into our HTML site,it could really create some
+damage then. Using this middleware, we prevent that basically by converting all these
+HTML symbols */
+app.use(xss());
 //Serving static files
 app.use(express.static(`${__dirname}/public`));
 // test middleware
