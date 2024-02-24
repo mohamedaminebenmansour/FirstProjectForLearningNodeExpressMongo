@@ -30,7 +30,7 @@ const token = signToken(user._id);
 const createSendToken =(user,statusCode,res)=>{
   const token = signToken(user._id);
   const cookieOptions = {
-    expiresIn: new Date(Date.now()+ process.env.JWT_COOKIES_EXPIRES_IN *1000*60*60*24) ,
+    expires: new Date(Date.now()+ process.env.JWT_COOKIES_EXPIRES_IN *1000*60*60*24) ,
     httpOnly:true //in order to provent those cross script attacks
   }
   if(process.env.NODE_ENV === 'production'){
