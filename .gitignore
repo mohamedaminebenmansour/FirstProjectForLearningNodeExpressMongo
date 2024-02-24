@@ -2241,3 +2241,13 @@ node_modules/express-rate-limit/dist/index.d.cts
 node_modules/express-rate-limit/dist/index.d.mts
 node_modules/express-rate-limit/dist/index.d.ts
 node_modules/express-rate-limit/dist/index.mjs
+node_modules/.package-lock.json
+node_modules/helmet/CHANGELOG.md
+node_modules/helmet/index.cjs
+node_modules/helmet/index.d.cts
+node_modules/helmet/index.d.mts
+node_modules/helmet/index.mjs
+node_modules/helmet/LICENSE
+node_modules/helmet/package.json
+node_modules/helmet/README.md
+node_modules/helmet/SECURITY.md
