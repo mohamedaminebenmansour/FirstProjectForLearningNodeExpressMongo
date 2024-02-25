@@ -153,7 +153,6 @@ tourSchema.pre('save', function(next){
 })
 
 tourSchema.pre('save', async function(next) {
-  console.log(this)
   if (!this.guides) {
     return next(); // or handle this case as needed
   }
@@ -191,6 +190,14 @@ tourSchema.post(/^find/, function(docs, next) {
   console.log(`Query took ${Date.now() - this.start} milliseconds!`);
   next();
 });
+
+tourSchema.pre(/^find/, function(next) {
+  this.populate({
+    path:"guides",
+    select:"-passwordConfirm -__v"
+  })
+  next();
+})
 
 //AGGREGATION MIDDLEWARE
 tourSchema.pre('aggregate', function(next){
