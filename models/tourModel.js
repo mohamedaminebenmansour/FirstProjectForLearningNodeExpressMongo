@@ -89,6 +89,38 @@ const tourSchema = new mongoose.Schema({
     }
   },
   {
+    startLocatoon:{//new object with tow fields
+      //GeoJSON
+      type: {
+        type: String,
+        enum: ['Point'],
+        default: 'Point'
+      },
+      coordinates: {
+        type: [Number],//that basically means the coordinates that we expect an array of numbers
+        address: String,
+        description: String
+      }
+    },
+    /*In order to really create new documents and theb embed them into another document
+    We actually need to create an array*/
+    
+    locations: [
+      {
+        type: {
+          type: String,
+          default: 'Point',
+          enum: ['Point']
+        },
+        coordinates: [Number],
+        address: String,
+        description: String,
+        day: Number
+      }
+    ],
+  },
+  
+  {
     toJSON:{virtuals :true},
     toObject:{virtuals :true}
     /*we cannot use this virtual property here in a query, because they're technically not part of the database.

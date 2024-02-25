@@ -22,7 +22,7 @@ mongoose.connect(DB,{
 //convert into a JS object using JSON.parse
 /*const tours= JSON.parse(fs.readFileSync('./tour-simple.json','utf-8'));
 error path: with "./" not the current folder is actually where the node application was actually started*/
-const tours= JSON.parse(fs.readFileSync(`${__dirname}/tours-simple.json`,'utf-8'));
+const tours= JSON.parse(fs.readFileSync(`${__dirname}/tours.json`,'utf-8'));
 //Import Data Into MongoDB
 const importData = async () =>{
     try {
