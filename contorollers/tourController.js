@@ -29,7 +29,7 @@ exports.getAllTours =catchAsync (async(req, res,next) => {
 
 exports.getTour =catchAsync ( async (req, res,next) => {
   //If you call populate() multiple times with the same path, only the last one will take effect.
-    const tour= await Tour.findById(req.params.id)
+    const tour= await Tour.findById(req.params.id).populate('reviews');
     if(!tour){
       return next(new AppError('Tour not found',404) );
     }

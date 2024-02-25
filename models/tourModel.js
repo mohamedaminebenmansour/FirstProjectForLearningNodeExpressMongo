@@ -124,7 +124,8 @@ const tourSchema = new mongoose.Schema({
       type: mongoose.Schema.ObjectId,
       ref: 'User'
     }
-  ]
+  ],
+
 },
 
 {
@@ -145,6 +146,12 @@ And so usually when we want to use this,then we should always use a regular func
 tourSchema.virtual('durationWeeks').get(function(){
   return this.duration / 7;
 });
+//VIRTUAL populate
+tourSchema.virtual('reviews',{
+  ref: 'Review',
+  foreignField: 'tour',//this is the name of the field in other model (on reviewModel in our case)
+  localField: '_id',
+})
 
 //Document Middelware: runs before .save() and .create() not .insertMany()
 tourSchema.pre('save', function(next){
