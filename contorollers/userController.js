@@ -5,7 +5,7 @@ const AppError = require('./../utils/appError');
 const { findByIdAndUpdate } = require('../models/tourModel');
 const factory =require('./handlerFactroy')
 
-
+ 
 const filterObj = (obj, ...allowedFields)=>{
     const newObject={};
     Object.keys(obj).forEach(el =>{

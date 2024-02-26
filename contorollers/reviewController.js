@@ -16,7 +16,7 @@ exports.createReview = catchAsync(async (req, res, next) => {
             review: newReview // Sending the newly created tour in the response 
         }
     });
-})
+}) 
 
 exports.getAllReviews = catchAsync(async (req, res, next) => {
     let filter={}
