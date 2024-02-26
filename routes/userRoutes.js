@@ -6,15 +6,21 @@ const router =express.Router();
 
 router.post('/signup',authController.signup);
 router.post('/login',authController.login);
-
 router.post('/forgetPassword',authController.forgotPasswrd);
 router.patch('/resetPassword/:token',authController.resetPassword);
-router.patch('/updateMyPassword',authController.protect,authController.updatePassword);
-router.patch('/updateMe',authController.protect,userController.updateMe);
-/*We are not actually delete a user from the database */
-router.delete('/deleteMe',authController.protect,userController.deleteMe);
-router.get('/me',authController.protect,userController.getMe,userController.getUser);
 
+/*protect all the routes that comes after this line "router.use(authController.protect);
+that because middelware runs in sequence" */
+router.use(authController.protect);
+
+router.patch('/updateMyPassword',authController.updatePassword);
+router.patch('/updateMe',userController.updateMe);
+/*We are not actually delete a user from the database */
+router.delete('/deleteMe',userController.deleteMe);
+router.get('/me',userController.getMe,userController.getUser);
+
+//
+router.use(authController.restrictTo('admin'));
 
 router
     .route('/')
