@@ -13,6 +13,7 @@ router.patch('/updateMyPassword',authController.protect,authController.updatePas
 router.patch('/updateMe',authController.protect,userController.updateMe);
 /*We are not actually delete a user from the database */
 router.delete('/deleteMe',authController.protect,userController.deleteMe);
+router.get('/me',authController.protect,userController.getMe,userController.getUser);
 
 
 router
