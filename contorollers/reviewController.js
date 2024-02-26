@@ -18,8 +18,9 @@ exports.createReview = catchAsync(async (req, res, next) => {
 })
 
 exports.getAllReviews = catchAsync(async (req, res, next) => {
-    
-    const reviews = await Review.find();
+    let filter={}
+    if(req.body.tour) filter={tour: req.params.tourId}
+    const reviews = await Review.find(filter);
     res.status(200).json({
         status: 'OK',
         results: reviews.length,
