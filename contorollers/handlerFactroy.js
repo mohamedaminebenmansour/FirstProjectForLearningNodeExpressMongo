@@ -29,3 +29,12 @@ exports.updateOne = Model=> catchAsync( async (req, res,next) => {
   }   
   ) 
 })
+exports.createOne =Model => catchAsync(async (req, res,next) => {
+  const newDoc = await Model.create(req.body);//"req.body" that's the data that comes with the post request
+      res.status(201).json({
+          status: 'ok',
+          data: {
+              data: newDoc // Sending the newly created tour in the response 
+          }
+      });
+})
