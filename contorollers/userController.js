@@ -1,4 +1,3 @@
-const APIFeatures = require('./../utils/apiFeatures');
 const catchAsync = require('./../utils/catchAsync');
 const User = require('./../models/userModel');
 const AppError = require('./../utils/appError');
@@ -14,22 +13,7 @@ const filterObj = (obj, ...allowedFields)=>{
     })
 return newObject;
 };
-
-exports.getAllUsers =catchAsync (async(req, res,next) => {
-    const features = new APIFeatures(User.find(),req.query)
-            .filter()
-            .sort()
-            .limitFields()
-            .paginate();
-        const users = await features.query;
-        res.status(200).json({
-            status: 'OK',
-            results: users.length, 
-            data: {
-                users
-            }
-        });
-})
+exports.getAllUsers = factory.getAll(User);
 exports.createUser =(req,res)=> {
     res.status(500).json({
         status: 'error',
