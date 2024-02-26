@@ -38,3 +38,18 @@ exports.createOne =Model => catchAsync(async (req, res,next) => {
           }
       });
 })
+
+exports.getOne =(Model, popOptinos)=>catchAsync ( async (req, res,next) => {
+    let query =Model.findById(req.params.id);
+    if(popOptinos) query =query.populate(popOptinos);
+    const doc= await query;
+    if(!doc){
+      return next(new AppError('document not found',404) );
+    }
+    res.status(200).json({
+            status: 'OK',
+            data: { 
+                 doc
+            }
+        });
+})

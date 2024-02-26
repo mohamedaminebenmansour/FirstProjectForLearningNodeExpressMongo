@@ -30,40 +30,19 @@ exports.getAllUsers =catchAsync (async(req, res,next) => {
             }
         });
 })
-exports.createUser = factory.createOne(User);
-/*
-exports.createUser =(req, res) => {
-    console.log(req.requestTime);
-    // Sending a JSON response with status 200
+exports.createUser =(req,res)=> {
     res.status(500).json({
         status: 'error',
-        message: 'this route is not yed defined!'
-    });
+        message: 'this route is not yed defined! please use /signup instead'
+    })
 }
-*/
+exports.getUser = factory.getOne(User);
 
-exports.getUser =(req, res) => {
-    console.log(req.requestTime);
-    // Sending a JSON response with status 200
-    res.status(500).json({
-        status: 'error',
-        message: 'this route is not yed defined!'
-    });
-}
 //Do not update passwrds with this
 exports.updateUser =factory.updateOne(User);
 exports.deleteUser =factory.deleteOne(User);
 
-/*
-exports.deleteUser =(req, res) => {
-    console.log(req.requestTime);
-    // Sending a JSON response with status 200
-    res.status(500).json({
-        status: 'error',
-        message: 'this route is not yed defined!'
-    });
-}
-*/
+
 
 exports.updateMe = catchAsync(async(req, res,next)=> {
     // 1) Error if user POSTs passwrod data

@@ -27,70 +27,14 @@ exports.getAllTours =catchAsync (async(req, res,next) => {
             }
         });
 })
-
-exports.getTour =catchAsync ( async (req, res,next) => {
-  //If you call populate() multiple times with the same path, only the last one will take effect.
-    const tour= await Tour.findById(req.params.id).populate('reviews');
-    if(!tour){
-      return next(new AppError('Tour not found',404) );
-    }
-    res.status(200).json({
-            status: 'OK',
-            data: { 
-                 tour
-            }
-        });
-})
+exports.getTour = factory.getOne(Tour,{path:'reviews'})
 exports.createTour = factory.createOne(Tour);
-/*
-exports.createTour = catchAsync(async (req, res,next) => {
-    const newTour = await Tour.create(req.body);//"req.body" that's the data that comes with the post request
-        res.status(201).json({
-            status: 'ok',
-            data: {
-                tour: newTour // Sending the newly created tour in the response 
-            }
-        });
-})
-*/
-
 exports.updateTour = factory.updateOne(Tour)
-/*
-exports.updateTour = catchAsync( async (req, res,next) => {
-    const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
-        new: true ,
-        runValidators: true
-    });
-    if(!tour){
-      return next(new AppError('Tour not found',404) );
-    }
-    res.status(200).json({
-        status: 'OK',
-        data: {
-            tour
-        }
-    }   
-    ) 
-})
-*/
 exports.deleteTour =factory.deleteOne(Tour);
-/*
-exports.deleteTour = catchAsync(async (req, res,next) => {
-    const tour = await Tour.findByIdAndDelete(req.params.id)
-    if(!tour){
-      return next(new AppError('Tour not found',404) );
-    }   
-        res.status(204).json({
-            status: 'OK',
-            data: null
-   })
-})
-*/
+
 exports.getTourStats =catchAsync(async (req, res,next) => {
     const stats = await Tour.aggregate([
         {
-            /*I'm gonna start with match, and match is basically to slect or to filter
-            certain documents */
             $match : {
                 ratingsAverge: {
                     $gte: 4.5
@@ -110,7 +54,7 @@ exports.getTourStats =catchAsync(async (req, res,next) => {
             }
         },
         {
-          $sort: { avgPrice: 1 }//use fields from thr group
+          $sort: { avgPrice: 1 }
         }
     ])
     console.log(stats);
@@ -127,9 +71,7 @@ exports.getMonthlyPlan = catchAsync(async (req, res,next) => {
   
       const plan = await Tour.aggregate([
         {
-            /*what unwind is gonna do si basically deconstruct an array field
-            from the info documents and then output one document for each element
-            of array */
+           
             $unwind : '$startDates'
         },
         {
