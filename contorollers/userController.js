@@ -3,6 +3,8 @@ const catchAsync = require('./../utils/catchAsync');
 const User = require('./../models/userModel');
 const AppError = require('./../utils/appError');
 const { findByIdAndUpdate } = require('../models/tourModel');
+const factory =require('./handlerFactroy')
+
 
 const filterObj = (obj, ...allowedFields)=>{
     const newObject={};
@@ -55,7 +57,9 @@ exports.updateUser =(req, res) => {
         message: 'this route is not yed defined!'
     });
 }
+exports.deleteUser =factory.deleteOne(User);
 
+/*
 exports.deleteUser =(req, res) => {
     console.log(req.requestTime);
     // Sending a JSON response with status 200
@@ -64,6 +68,7 @@ exports.deleteUser =(req, res) => {
         message: 'this route is not yed defined!'
     });
 }
+*/
 
 exports.updateMe = catchAsync(async(req, res,next)=> {
     // 1) Error if user POSTs passwrod data
