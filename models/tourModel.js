@@ -135,9 +135,43 @@ const tourSchema = new mongoose.Schema({
   So we can not say, for example,tour.find where duration weeks is equal to one. That's not gonna work, 
   again because this property is not actually part of the database. */
 });
+/*
+my Questions here:
+1)How do we decided which field we actually need to index??
+2)why don"t we set indexes on all the fields??
+after my research I find my response
+1)
+    a. Identify frequently queried fields: Analyze your application's queries to identify which fields are frequently used in your 
+    find, update, delete, and aggregate operations. These are good candidates for indexing.
 
+    b. Consider fields used in sorting and filtering: If your queries involve sorting or filtering based on certain fields, 
+    those fields should be indexed.
+
+    c. Analyze the cardinality of fields: Fields with high cardinality (i.e., a large number of unique values) 
+    are good candidates for indexing because they can help narrow down search results efficiently.
+
+    d. Consider compound indexes: If your queries often involve multiple fields together, consider creating compound indexes (indexes that include multiple fields). This can improve the efficiency of queries that filter or sort on multiple criteria.
+    
+2)While indexing can improve query performance, it also has drawbacks:
+
+    a. Increased storage space: Indexes consume additional storage space. Creating indexes on every field can significantly 
+    increase storage requirements, especially for large collections.
+
+    b. Impact on write performance: Indexes need to be updated whenever a document is inserted, updated, or deleted. 
+    Adding indexes to every field can increase the overhead of these operations, potentially impacting write performance.
+
+    c. Maintenance overhead: Managing indexes requires additional overhead. This includes monitoring index usage, 
+    rebuilding indexes when necessary, and considering index strategies as the application evolves.
+
+    d. Diminishing returns: Indexes are most beneficial for fields that are frequently queried or used for sorting/filtering. 
+    Indexing fields that are rarely queried may not provide significant performance benefits but can still incur the aforementioned costs.
+
+    Therefore, it's essential to carefully consider the trade-offs and only index fields that are critical for query performance. Regularly analyze query patterns and adjust indexing strategies as needed to ensure optimal performance.
+
+  */
 //tourSchema.index({price:1})
 tourSchema.index({price:1,ratingsAverge:-1});
+tourSchema.index({slug:1})
 /*Virtual properties are basically fields that we can define on our schema but that will not be persisted.
 So they will not be saved into the database in order to save us some space there.And most of the time, of course,
 we want to really save our data to the database, but virtual properties make a lot of sense for fields that 
