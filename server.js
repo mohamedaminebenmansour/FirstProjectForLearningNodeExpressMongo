@@ -39,4 +39,4 @@ process.on('unhandledRejection', err => {
   
 })
 
-//console.log(x);// exemple of Uncaught Exception
+//console.log(x);// exemple of Uncaught Exception x in not defined

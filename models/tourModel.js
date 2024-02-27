@@ -135,6 +135,8 @@ const tourSchema = new mongoose.Schema({
   So we can not say, for example,tour.find where duration weeks is equal to one. That's not gonna work, 
   again because this property is not actually part of the database. */
 });
+
+tourSchema.index({price:1})
 /*Virtual properties are basically fields that we can define on our schema but that will not be persisted.
 So they will not be saved into the database in order to save us some space there.And most of the time, of course,
 we want to really save our data to the database, but virtual properties make a lot of sense for fields that 

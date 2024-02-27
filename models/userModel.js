@@ -47,7 +47,7 @@ const userSchema = new mongoose.Schema({
       select: false
     }
 });
-
+/*
 userSchema.pre('save',async function(next){
     // Only run this function if password was actually modified
     if(!this.isModified('password')) return next();
@@ -57,6 +57,7 @@ userSchema.pre('save',async function(next){
     /*we have required on usershema , now you might wonder wyh this works?
     because we actuallay set passwrd confirm  to a require but that simply
     means that it's a required input , not it's required to actually be presisted. */
+    /*
     this.passwordConfirm = undefined;
     next();
 })
@@ -64,7 +65,7 @@ userSchema.pre('save',async function(next){
   if(!this.isModified('password')|| this.isNew) return next();
   this.passwrdChangedAt = Date.now()-1000;
   next();
- });
+ });*/
 
 userSchema.pre(/^find/, function(next){
   //this points to the current query
