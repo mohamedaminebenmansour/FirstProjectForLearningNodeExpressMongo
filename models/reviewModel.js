@@ -38,10 +38,37 @@ reviewSchema.pre(/^find/, function(next) {
     path:"user",
     select:'name photo'
   });
-  
   next();
 })
 
+reviewSchema.statics.calculAvergeRatings = async function(tourId){
+  const stats = await this.aggregate([
+    {
+      $match:{
+        tour:tourId
+      }
+    },
+    {$group:{
+      _id:'$tour',
+      nRating:{
+        $sum:1
+      },
+      avgRating: {
+        $avg:'$rating'
+      }
+    }}
+  ])
+  console.log(stats)
+  await Tour.findByIdAndUpdate(tourId,{
+    ratingsAverge: stats[0].avgRating,
+    ratingsQuantity: stats[0].nRating
+  })
+}
+/*IMPORTANT: Post does not get access to next */
+reviewSchema.post('save', function() {
+  //this points to current review
+  this.constructor.calculAvergeRatings(this.tour);
+})
 
 
 
