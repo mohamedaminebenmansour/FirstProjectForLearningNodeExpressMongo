@@ -22,6 +22,11 @@ router
     tourController.getMonthlyPlan);
 
 router
+  .route('/tours-within/:distance/center/:latlng/unit/:unit')
+  .get(tourController.getToursWithin)
+// /tours-distance?distance=500&center=-40,45&unit=km
+// /tours-distance/233/center/-40,50/unit/km
+router
   .route('/')
   .get(tourController.getAllTours)
   .post(

@@ -91,7 +91,7 @@ const tourSchema = new mongoose.Schema({
   }
 ,
 
-  startLocatoon:{//new object with tow fields
+  startLocation:{//new object with tow fields
     //GeoJSON
     type: {
       type: String,
@@ -173,6 +173,7 @@ after my research I find my response
 //tourSchema.index({price:1})
 tourSchema.index({price:1,ratingsAverge:-1});
 tourSchema.index({slug:1})
+tourSchema.index({startLocation: '2dsphere'})
 /*Virtual properties are basically fields that we can define on our schema but that will not be persisted.
 So they will not be saved into the database in order to save us some space there.And most of the time, of course,
 we want to really save our data to the database, but virtual properties make a lot of sense for fields that 
