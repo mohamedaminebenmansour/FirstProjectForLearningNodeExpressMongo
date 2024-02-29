@@ -246,6 +246,7 @@ tourSchema.pre(/^find/, function(next) {
 })
 
 //AGGREGATION MIDDLEWARE
+/*
 tourSchema.pre('aggregate', function(next){
   this.pipeline().unshift({
     $match : {
@@ -255,7 +256,7 @@ tourSchema.pre('aggregate', function(next){
   console.log(this.pipeline());
   next();
 })
-
+*/
 const Tour = mongoose.model('Tour', tourSchema);
 
 module.exports = Tour;
