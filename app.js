@@ -18,10 +18,10 @@ const reviewRouter = require('./routes/reviewRoutes');
 const app = express(); // Creating an instance of Express application
 
 app.set('view engine','pug');
-app.set('views',path.join(__dirname, 'views'))
+app.set('views', path.join(__dirname, 'views'));
 
-//Serving static files
-//app.use(express.static(`${__dirname}/public`));
+// 1) GLOBAL MIDDLEWARES
+// Serving static files
 app.use(express.static(path.join(__dirname, 'public')));
 
 // 1) Global MIDDLEWARES
@@ -80,7 +80,10 @@ app.use((req, res, next) => {
 
 // 3) ROUTES
 app.get('/', (req, res) => {
-  res.status(200).render('base');
+  res.status(200).render('base',{
+    tour:'this is my exemple',
+    'user':"mohamed amin benmansour"
+  });
 });
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
